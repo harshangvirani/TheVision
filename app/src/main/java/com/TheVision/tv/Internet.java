@@ -51,15 +51,12 @@ public class Internet extends AppCompatActivity {
         ttsFirstPage();
 
     }
-
     public void getSpeechInput(View view) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 
         startActivityForResult(intent, 1);
     }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -71,12 +68,8 @@ public class Internet extends AppCompatActivity {
                     description = result.get(0);
                 }
                 break;
-
-
         }
-
     }
-
     private class DownloadWebPageTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... urls) {
@@ -90,7 +83,6 @@ public class Internet extends AppCompatActivity {
             response = paragraph.text();
             return null;
         }
-
         @Override
         protected void onPostExecute(Void v) {
             textView.setText(response);
@@ -98,9 +90,7 @@ public class Internet extends AppCompatActivity {
             ttsFirstPage();
         }
     }
-
     public void ttsFirstPage() {
-
         t1 = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -109,7 +99,6 @@ public class Internet extends AppCompatActivity {
                 }
             }
         });
-
         final Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
@@ -122,15 +111,12 @@ public class Internet extends AppCompatActivity {
             }
         }, 500);
     }
-
-
     public void onPause() {
         if (t1 != null) {
             t1.shutdown();
         }
         super.onPause();
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -138,19 +124,15 @@ public class Internet extends AppCompatActivity {
         i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i1);
     }
-
     public void readWebpage(View view) {
         DownloadWebPageTask task = new DownloadWebPageTask();
         task.execute("http://en.m.wikipedia.org/wiki/Special:search?search=" + ee.getText().toString());
         addDescription();
 
     }
-
     private void addDescription() {
         String id = databaseReference.push().getKey();
         internetDataStore internetDataStore = new internetDataStore(email, description);
         databaseReference.child(id).setValue(internetDataStore);
     }
-
-
 }
